@@ -1,13 +1,25 @@
+require "securerandom"
+
+TOKEN_FILE = File.join(__dir__, ".vagrant", "k3s-token")
+unless File.exist?(TOKEN_FILE)
+  Dir.mkdir(File.dirname(TOKEN_FILE)) unless Dir.exist?(File.dirname(TOKEN_FILE))
+  File.write(TOKEN_FILE, SecureRandom.hex(32))
+end
+K3S_TOKEN = File.read(TOKEN_FILE).strip
+
 Vagrant.configure("2") do |config|
+K3S_TOKEN = File.read(TOKEN_FILE).strip
     config.vm.box = "cloud-image/debian-13"
     config.vm.define "hzakharcS" do |server|
         server.vm.hostname = "hzakharcS"
         server.vm.network "private_network", ip: "192.168.56.110"
-        server.vm.provider "virutalbox" do |vb|
+        server.vm.provider "virtualbox" do |vb|
             vb.name = "hzakharcS"
-            vb.cpus = "1"
-            vb.memory = "512"
+            vb.cpus = "2"
+            vb.memory = "2048"
         end
+        server.vm.provision "shell", path: "scripts/server-setup.sh",
+            env: { "K3S_TOKEN" => K3S_TOKEN }
     end
     config.vm.define "hzakharcSW" do |server_worker|
         server_worker.vm.hostname = "hzakharcSW"
@@ -15,7 +27,9 @@ Vagrant.configure("2") do |config|
         server_worker.vm.provider "vitualbox" do |vb|
             vb.name = "hzakharcSW"
             vb.cpus = "1"
-            vb.memory "512"
+            vb.memory "1024"
         end
+        server_worker.vm.provision "shell", path: "scripts/server-worker-setup.sh",
+            env: { "K3S_TOKEN" => K3S_TOKEN }
     end
 end
