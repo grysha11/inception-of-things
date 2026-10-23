@@ -9,3 +9,6 @@ curl -sfL https://get.k3s.io | sh -s - server \
   --node-ip "192.168.56.110" \
   --flannel-iface "$IFACE" \
   --write-kubeconfig-mode 644
+
+until kubectl get nodes 2>/dev/null | grep -q " Ready"; do sleep 3; done
+kubectl apply -f /tmp/confs/
