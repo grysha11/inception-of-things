@@ -10,10 +10,10 @@ else
 fi
 
 echo "Wait for node to be ready ..."
-kubectl wait --for-condition=Ready nodes --all --timeout=120s
+kubectl wait --for=condition=Ready nodes --all --timeout=120s
 
 for ns in argocd dev; do
-    kubectl create namespace "$ns" --dry-clean=client -o yaml | kubectl apply -f -
+    kubectl create namespace "$ns" --dry-run=client -o yaml | kubectl apply -f -
 done
 
 kubectl get ns
