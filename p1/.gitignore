@@ -1,1 +1,4 @@
 .vagrant
+p1/confs/packer/iso/
+p1/confs/packer/output/
+p1/confs/packer/packer_cache/
