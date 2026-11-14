@@ -42,14 +42,13 @@ source "virtualbox-iso" "debian" {
     ["modifyvm", "{{ .Name }}", "--nic-type1", "virtio"],
     ["modifyvm", "{{ .Name }}", "--usb-xhci", "on"],
     ["modifyvm", "{{ .Name }}", "--keyboard", "usb", "--mouse", "usb"],
-    ["modifyvm", "{{ .Name }}", "--graphicscontroller", "qemuramfb"],
   ]
 
   http_directory = "http"
 
-  boot_wait = "5s"
+  boot_wait = "15s"
   boot_command = [
-    "c<wait>",
+    "c<wait3>",
     "linux /install.a64/vmlinuz auto=true priority=critical ",
     "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg --- quiet<enter><wait>",
     "initrd /install.a64/initrd.gz<enter><wait>",

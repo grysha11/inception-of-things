@@ -16,6 +16,4 @@ apt-get -y autoremove --purge
 apt-get -y clean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 truncate -s 0 /etc/machine-id
-dd if=/dev/zero of=/EMPTY bs=1M || true
-rm -f /EMPTY
 sync
